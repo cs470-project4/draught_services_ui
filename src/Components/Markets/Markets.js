@@ -56,9 +56,9 @@ export default function Markets(props) {
     async function getMarkets() {
       const marketsJSONString = await api.allMarkets();
       console.log(
-        `markets from the DB ${JSON.stringify(marketsJSONString.data.data)}`
+        `markets from the DB ${JSON.stringify(marketsJSONString.data)}`
       );
-      setMarkets(marketsJSONString.data.data);
+      setMarkets(marketsJSONString.data);
     }
     getMarkets();
   }, []);

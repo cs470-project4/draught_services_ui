@@ -45,4 +45,8 @@ export default class APIInterface {
         return axiosAgent.get(`markets/all-markets`);
     }
 
+    async allEmployees() {
+        return axiosAgent.get(`employees/all-employees`);
+    }
+
 }
