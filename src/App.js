@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import {Fragment} from "react";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import MainDrawer from './menu/MainDrawer';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const makeUserName = ({user_fName, user_mName, user_lName}) => {
+
+    const middleName = () => user_mName === undefined ? '' :
+                               (user_mName.length === 1 ? `${user_mName}.` : user_mName);
+
+    return `${user_fName} ${middleName()} ${user_lName}`;
+};
+
+export default function App({ user, logoutAction }) {
+    console.log("User object:", user); 
+    const mainPageTitle = "Draught Services";
+
+    return (
+                <MainDrawer title={mainPageTitle}
+                            user={makeUserName(user)}
+                            logoutAction={logoutAction}/>
+    )
+
 }
 
-export default App;
