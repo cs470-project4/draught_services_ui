@@ -30,7 +30,7 @@ export default class APIInterface {
                 {
                     error,
                     user: undefined
-                 }));
+                }));
     }
 
     async allRoutes() {
@@ -47,6 +47,31 @@ export default class APIInterface {
 
     async allEmployees() {
         return axiosAgent.get(`employees/all-employees`);
+    }
+
+    // transactions total count
+    async getTransactionsCount() {
+        return axiosAgent.get(`transactions/transaction-count`);
+    }
+
+    // transactions by accountID
+    async transactionsByAccount(accountID) {
+        return axiosAgent.get(`transactions/account/${accountID}`);
+    }
+
+    // transactions by routeID
+    async transactionsByRoute(routeID) {
+        return axiosAgent.get(`transactions/route/${routeID}`);
+    }
+
+    // transactions for all routes
+    async transactionsForAllRoutes() {
+        return axiosAgent.get(`transactions/all-routes`);
+    }
+
+    // transactions by marketID
+    async transactionsByMarket(marketID) {
+        return axiosAgent.get(`transactions/market/${marketID}`);
     }
 
 }
