@@ -1,18 +1,40 @@
+import { useState, useEffect } from "react";
+import API from "../../API_Interface/API_Interface";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import NativeSelect from "@mui/material/NativeSelect";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
-import CurrentCycleCount from "./CurrentCycleCount";
+import TransactionsForCycle from "./TransactionsForCycle";
 import AccountID from "./AccountID";
 import RouteID from "./RouteID";
 import CycleID from "./CycleID";
 import MarketID from "./MarketID";
 
 export default function Transactions(props) {
+      const [cycles, setCycles] = useState([]);
+      const [selectedCycle, setSelectedCycle] = useState("");
+      useEffect(() => {
+        const api = new API();
+        async function fetchCycles() {
+            const response = await api.lastFiveCycles();
+            if (response && response.data) {
+                setCycles(response.data);
+                setSelectedCycle(response.data[0].cycleID);
+            }
+        }
+        fetchCycles();
+      }, []);
+        const handleCycleChange = (event) => {
+            setSelectedCycle(event.target.value);
+        };
+    
   return (
     <div>
+      <CycleSelect cycles={cycles} selectedCycle={selectedCycle} setSelectedCycle={setSelectedCycle} handleCycleChange={handleCycleChange} />
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -22,7 +44,7 @@ export default function Transactions(props) {
           Current Cycle Transaction Count
         </AccordionSummary>
         <AccordionDetails>
-          <CurrentCycleCount />
+          <TransactionsForCycle selectedCycle={selectedCycle} setSelectedCycle={setSelectedCycle} />
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -74,5 +96,32 @@ export default function Transactions(props) {
         </AccordionDetails>
       </Accordion>
     </div>
+  );
+}
+
+function CycleSelect({ selectedCycle, setSelectedCycle, cycles, handleCycleChange}) {
+  return (
+    <Box sx={{ minWidth: 120, mb: 5 }}>
+      <FormControl>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Cycle ID
+        </InputLabel>
+        <NativeSelect
+                  defaultValue={selectedCycle}
+                  value={selectedCycle}
+                  onChange={handleCycleChange}
+          inputProps={{
+            name: "cycle",
+            id: "cycle-native-select",
+          }}
+        >
+            {cycles.map((cycle) => (
+                <option key={cycle.cycleID} value={cycle.cycleID}>
+                {cycle.cycleID}
+                </option>
+            ))}
+        </NativeSelect>
+      </FormControl>
+    </Box>
   );
 }

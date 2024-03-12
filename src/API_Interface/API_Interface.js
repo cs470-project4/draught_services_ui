@@ -50,13 +50,13 @@ export default class APIInterface {
     }
 
     // transactions total count
-    async getTransactionsCount() {
-        return axiosAgent.get(`transactions/transaction-count`);
+    async getTransactionsForCycle(cycleID) {
+        return axiosAgent.get(`transactions/${cycleID}`);
     }
 
     // transactions by accountID
-    async transactionsByAccount(accountID) {
-        return axiosAgent.get(`transactions/account/${accountID}`);
+    async transactionsByAccount(cycleID, accountID) {
+        return axiosAgent.get(`transactions/${cycleID}/${accountID}/one-account`);
     }
 
     // transactions by routeID
@@ -72,6 +72,11 @@ export default class APIInterface {
     // transactions by marketID
     async transactionsByMarket(marketID) {
         return axiosAgent.get(`transactions/market/${marketID}`);
+    }
+
+    // get last 5 cycles
+    async lastFiveCycles() {
+        return axiosAgent.get(`cycles/last-five`);
     }
 
 }
