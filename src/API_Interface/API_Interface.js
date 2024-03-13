@@ -79,4 +79,8 @@ export default class APIInterface {
         return axiosAgent.get(`cycles/last-five`);
     }
 
+    async accountsForCycle(cycleID) {
+        return axiosAgent.get(`cycles/${cycleID}/accounts`);
+    }
+
 }

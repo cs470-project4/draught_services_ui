@@ -9,7 +9,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TransactionsForCycle from "./TransactionsForCycle";
-import AccountID from "./AccountID";
+import AccountsTable from "./AccountsTable";
 import RouteID from "./RouteID";
 import CycleID from "./CycleID";
 import MarketID from "./MarketID";
@@ -34,7 +34,12 @@ export default function Transactions(props) {
     
   return (
     <div>
-      <CycleSelect cycles={cycles} selectedCycle={selectedCycle} setSelectedCycle={setSelectedCycle} handleCycleChange={handleCycleChange} />
+      <CycleSelect
+        cycles={cycles}
+        selectedCycle={selectedCycle}
+        setSelectedCycle={setSelectedCycle}
+        handleCycleChange={handleCycleChange}
+      />
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -44,7 +49,10 @@ export default function Transactions(props) {
           Current Cycle Transaction Count
         </AccordionSummary>
         <AccordionDetails>
-          <TransactionsForCycle selectedCycle={selectedCycle} setSelectedCycle={setSelectedCycle} />
+          <TransactionsForCycle
+            selectedCycle={selectedCycle}
+            setSelectedCycle={setSelectedCycle}
+          />
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -56,7 +64,7 @@ export default function Transactions(props) {
           Transactions by Account
         </AccordionSummary>
         <AccordionDetails>
-          <AccountID />
+          <AccountsTable selectedCycle={selectedCycle} />
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -107,7 +115,6 @@ function CycleSelect({ selectedCycle, setSelectedCycle, cycles, handleCycleChang
           Cycle ID
         </InputLabel>
         <NativeSelect
-                  defaultValue={selectedCycle}
                   value={selectedCycle}
                   onChange={handleCycleChange}
           inputProps={{
