@@ -11,10 +11,33 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
 
-function Row({ account }) {
+function Row({ account, selectedCycle }) {
   const [open, setOpen] = useState(false);
-  // Implement fetching of transactions for this account if necessary
+  const [transactions, setTransactions] = useState([]);
+  const api = new API();
+
+  // click callback to get transactions for this account
+  const handleExpandClick = async () => {
+    setOpen(!open);
+    // only fetch transactions if the row is open
+    if(!open && transactions.length === 0) {
+      try {
+        const response = await api.transactionsByAccount(
+          selectedCycle,
+          account.accountID
+        );
+        console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`);
+        setTransactions(response.data);
+      } catch (error) {
+        console.error("Failed to fetch transactions", error);
+        // Handle error appropriately
+      }
+    }
+  }
 
   return (
     <>
@@ -23,7 +46,7 @@ function Row({ account }) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={handleExpandClick}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -39,6 +62,41 @@ function Row({ account }) {
         <TableCell align="right">{account.cycleID}</TableCell>
       </TableRow>
       {/* Implement the collapse content */}
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Transactions
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    {/* Define the headers for your transactions data */}
+                    <TableCell>Employee ID</TableCell>
+                    <TableCell>Account ID</TableCell>
+                    <TableCell>Cycle ID</TableCell>
+                    <TableCell>Taps</TableCell>
+                    <TableCell>Last Modified</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {transactions.map((transaction, key) => (
+                    <TableRow key={key}>
+                      {/* Display transaction data */}
+                      <TableCell>{transaction.employeeID}</TableCell>
+                      <TableCell>{transaction.accountID}</TableCell>
+                      <TableCell>{transaction.cycleID}</TableCell>
+                      <TableCell>{transaction.taps}</TableCell>
+                      <TableCell>{transaction.lastModified}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
     </>
   );
 }
@@ -80,11 +138,12 @@ function AccountsTable({ selectedCycle }) {
         </TableHead>
         <TableBody>
           {accounts.map((account) => (
-            <Row key={account.accountID} account={account} />
+            <Row key={account.accountID} account={account} selectedCycle={selectedCycle} />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
+  
 export default AccountsTable;
