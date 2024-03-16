@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 
-function Row({ account, selectedCycle }) {
+function Row({ route, selectedCycle }) {
   const [open, setOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const api = new API();
@@ -24,20 +24,20 @@ function Row({ account, selectedCycle }) {
   const handleExpandClick = async () => {
     setOpen(!open);
     // only fetch transactions if the row is open
-    if(!open && transactions.length === 0) {
+    if (!open && transactions.length === 0) {
       try {
-        const response = await api.transactionsByAccount(
+        const response = await api.routeTransactionsForCycle(
           selectedCycle,
-          account.accountID
+          route.routeID
         );
-        console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`);
+        console.log(`inner response.data: ${JSON.stringify(response.data, null, 2)}`);
         setTransactions(response.data);
       } catch (error) {
         console.error("Failed to fetch transactions", error);
         // Handle error appropriately
       }
     }
-  }
+  };
 
   return (
     <>
@@ -52,14 +52,13 @@ function Row({ account, selectedCycle }) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {account.accountName}
+          {route.routeName}
         </TableCell>
-        <TableCell align="right">{account.accountID}</TableCell>
-        <TableCell align="right">{account.routeID}</TableCell>
-        <TableCell align="right">{account.marketID}</TableCell>
-        <TableCell align="right">{account.status}</TableCell>
-        <TableCell align="right">{account.lastModified}</TableCell>
-        <TableCell align="right">{account.cycleID}</TableCell>
+        <TableCell align="right">{route.routeID}</TableCell>
+        <TableCell align="right">{route.marketID}</TableCell>
+        <TableCell align="right">{route.status}</TableCell>
+        <TableCell align="right">{route.lastModified}</TableCell>
+        <TableCell align="right">{route.cycleID}</TableCell>
       </TableRow>
       {/* Implement the collapse content */}
       <TableRow>
@@ -73,7 +72,8 @@ function Row({ account, selectedCycle }) {
                 <TableHead>
                   <TableRow>
                     {/* Define the headers for your transactions data */}
-                    <TableCell>Employee ID</TableCell>
+                    <TableCell>Route Name</TableCell>
+                    <TableCell>Route ID</TableCell>
                     <TableCell>Account ID</TableCell>
                     <TableCell>Cycle ID</TableCell>
                     <TableCell>Taps</TableCell>
@@ -84,7 +84,8 @@ function Row({ account, selectedCycle }) {
                   {transactions.map((transaction, key) => (
                     <TableRow key={key}>
                       {/* Display transaction data */}
-                      <TableCell>{transaction.employeeID}</TableCell>
+                      <TableCell>{transaction.routeName}</TableCell>
+                      <TableCell>{transaction.routeID}</TableCell>
                       <TableCell>{transaction.accountID}</TableCell>
                       <TableCell>{transaction.cycleID}</TableCell>
                       <TableCell>{transaction.taps}</TableCell>
@@ -105,29 +106,27 @@ Row.propTypes = {
   account: PropTypes.object.isRequired,
 };
 
-
-
-function AccountsTable({ selectedCycle }) {
-  const [ accounts, setAccounts ] = useState([]);
+function RoutesTable({ selectedCycle }) {
+  const [routes, setRoutes] = useState([]);
   const api = new API();
   useEffect(() => {
     const fetchAccounts = async () => {
       if (selectedCycle) {
-        const response = await api.accountsForCycle(selectedCycle);
-        setAccounts(response.data);
+        const response = await api.routesForCycle(selectedCycle);
+        console.log(`routes response.data: ${JSON.stringify(response.data, null, 2)}`);
+        setRoutes(response.data);
       }
     };
     fetchAccounts();
   }, [selectedCycle]);
-  
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Account Name</TableCell>
-            <TableCell align="right">Account ID</TableCell>
+            <TableCell>Route Name</TableCell>
             <TableCell align="right">Route ID</TableCell>
             <TableCell align="right">Market ID</TableCell>
             <TableCell align="right">Status</TableCell>
@@ -136,13 +135,17 @@ function AccountsTable({ selectedCycle }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {accounts.map((account) => (
-            <Row key={account.accountID} account={account} selectedCycle={selectedCycle} />
+          {routes.map((route, key) => (
+            <Row
+              key={key}
+              route={route}
+              selectedCycle={selectedCycle}
+            />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
-  
-export default AccountsTable;
+
+export default RoutesTable;

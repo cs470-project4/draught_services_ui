@@ -79,8 +79,24 @@ export default class APIInterface {
         return axiosAgent.get(`cycles/last-five`);
     }
 
+    // get accounts for a cycle
     async accountsForCycle(cycleID) {
         return axiosAgent.get(`cycles/${cycleID}/accounts`);
+    }
+
+    // get routes that have transactions for a particular cycle
+    async routesForCycle(cycleID) {
+        return axiosAgent.get(`routes/${cycleID}/routes`);
+    }
+
+    // get particular route's transactions for a cycle
+    async routeTransactionsForCycle(cycleID, routeID) {
+        return axiosAgent.get(`transactions/${cycleID}/${routeID}/trans-for-route`);
+    }
+
+    // get transactions for a cycle ID
+    async transactionsForCycle(cycleID) {
+        return axiosAgent.get(`transactions/${cycleID}/all-routes`);
     }
 
 }

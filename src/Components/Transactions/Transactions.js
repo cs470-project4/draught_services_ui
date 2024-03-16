@@ -10,8 +10,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TransactionsForCycle from "./TransactionsForCycle";
 import AccountsTable from "./AccountsTable";
-import RouteID from "./RouteID";
-import CycleID from "./CycleID";
+import RoutesTable from "./RoutesTable";
+import Cycle from "./Cycle";
 import MarketID from "./MarketID";
 
 export default function Transactions(props) {
@@ -76,7 +76,7 @@ export default function Transactions(props) {
           Transactions by Route
         </AccordionSummary>
         <AccordionDetails>
-          <RouteID />
+          <RoutesTable selectedCycle={selectedCycle} />
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -88,7 +88,7 @@ export default function Transactions(props) {
           Transactions by Cycle
         </AccordionSummary>
         <AccordionDetails>
-          <CycleID />
+          <Cycle selectedCycle={selectedCycle} />
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -100,7 +100,7 @@ export default function Transactions(props) {
           Transactions by Market
         </AccordionSummary>
         <AccordionDetails>
-          <MarketID />
+          <MarketID selectedCycle={selectedCycle} />
         </AccordionDetails>
       </Accordion>
     </div>
