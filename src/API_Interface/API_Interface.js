@@ -109,4 +109,9 @@ export default class APIInterface {
         return axiosAgent.get(`summary/top-products`);
     }
 
+    // get all active accounts
+    async getActiveAccounts() {
+        return axiosAgent.get(`accounts/active`);
+    }
+
 }
