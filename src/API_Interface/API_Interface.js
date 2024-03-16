@@ -99,4 +99,14 @@ export default class APIInterface {
         return axiosAgent.get(`transactions/${cycleID}/all-routes`);
     }
 
+    // get summary total for latest cycle
+    async summaryTotal(cycleID) {
+        return axiosAgent.get(`summary/total`);
+    }
+
+    // get summary top products
+    async summaryTopProducts(cycleID) {
+        return axiosAgent.get(`summary/top-products`);
+    }
+
 }
