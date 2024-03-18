@@ -12,7 +12,7 @@ import TransactionsForCycle from "./TransactionsForCycle";
 import AccountsTable from "./AccountsTable";
 import RoutesTable from "./RoutesTable";
 import Cycle from "./Cycle";
-import MarketID from "./MarketID";
+import MarketsTable from "./MarketsTable";
 
 export default function Transactions(props) {
       const [cycles, setCycles] = useState([]);
@@ -100,7 +100,7 @@ export default function Transactions(props) {
           Transactions by Market
         </AccordionSummary>
         <AccordionDetails>
-          <MarketID selectedCycle={selectedCycle} />
+          <MarketsTable selectedCycle={selectedCycle} />
         </AccordionDetails>
       </Accordion>
     </div>

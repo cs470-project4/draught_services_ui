@@ -114,4 +114,14 @@ export default class APIInterface {
         return axiosAgent.get(`accounts/active`);
     }
 
+    // get markets for a cycle
+    async getMarketsForCycle(cycleID) {
+        return axiosAgent.get(`markets/${cycleID}/markets`);
+    }
+
+    // get markets for a cycle
+    async marketTransactionsForCycle(cycleID, marketID) {
+        return axiosAgent.get(`transactions/${cycleID}/${marketID}/trans-for-market`);
+    }
+
 }
